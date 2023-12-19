@@ -27,7 +27,7 @@ export class User {
   national_registration_code: string;
 
   @Column()
-  date_of_birth: string;
+  date_of_birth: Date;
 
   @Column()
   instagram_username: string;
