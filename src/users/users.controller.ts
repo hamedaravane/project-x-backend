@@ -1,23 +1,26 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { User } from './users.entities';
-import { UsersService } from './users.service';
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { UserDto } from "./users.entities";
+import { UsersService } from "./users.service";
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAllUsers(): User[] | null {
+  findAllUsers(): UserDto[] | null {
     return null;
   }
 
-  @Get('/:id')
-  async findUserById(@Param('id') id: number): Promise<User | null> {
-    return await this.usersService.findUserById(id);
+  @Get('/:uuid')
+  async findUserById(@Param('uuid') uuid: string): Promise<UserDto | null> {
+    return await this.usersService.findUserById(uuid);
   }
 
   @Post('create')
-  createUser(@Body() userEntity: User) {}
+  async createUser(@Body() userEntity: UserDto) {
+    console.log(userEntity);
+    return await this.usersService.registerUser(userEntity);
+  }
 
   @Post('photo')
   async uploadProfilePhoto(@Body() data: { profilePhoto: string }) {

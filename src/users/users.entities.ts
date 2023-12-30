@@ -1,12 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
-  user_id: number;
+export class UserDto {
+  @PrimaryColumn()
+  uuid: string;
 
   @Column()
-  user_type: UserType;
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  type: string;
 
   @Column()
   first_name: string;
@@ -32,22 +38,22 @@ export class User {
   @Column()
   instagram_username: string;
 
-  @Column()
+  @Column({ nullable: true })
   twitter_username: string;
 
   @Column()
-  gender: Gender;
+  gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   marital_status: MaritalStatus;
 
   @Column()
   mobile_phone_number: string;
 
-  @Column()
+  @Column({ nullable: true })
   country_of_residence: string;
 
-  @Column()
+  @Column({ nullable: true })
   state_of_residence: string;
 
   @Column()
@@ -56,7 +62,7 @@ export class User {
   @Column()
   address_of_residence: string;
 
-  @Column()
+  @Column({ nullable: true })
   postal_code: string;
 
   @Column({ nullable: true })
@@ -68,6 +74,37 @@ export class User {
   @Column({ nullable: true })
   business_twitter_username: string;
 }
+
+export interface User {
+  uuid: string;
+  email: string;
+  password: string;
+  type: string;
+  firstName: string;
+  lastName: string;
+  persianFirstName: string;
+  persianLastName: string;
+  nationalIdNumber: string;
+  nationalRegistrationCode: string;
+  birthDate: Date;
+  instagramUsername: string;
+  twitterUsername: string;
+  gender: Gender;
+  maritalStatus: MaritalStatus;
+  mobilePhoneNumber: string;
+  residenceCountry: string;
+  residenceState: string;
+  residenceCity: string;
+  address: string;
+  postalCode: string;
+  businessName: string;
+  businessInstagramUsername: string;
+  businessTwitterUsername: string;
+}
+
+// export function convertUserDomainToDto {}
+
+// export function convertUserDtoToDomain {}
 
 enum UserType {
   BUSINESS = 'business',
