@@ -17,7 +17,7 @@ export class UsersController {
   }
 
   @Post('create')
-  createUser() {}
+  createUser(@Body() userEntity: User) {}
 
   @Post('photo')
   async uploadProfilePhoto(@Body() data: { profilePhoto: string }) {
