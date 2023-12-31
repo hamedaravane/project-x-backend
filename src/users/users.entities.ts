@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn } from "typeorm";
 
-@Entity('users')
-export class UserDto {
+@Entity('user')
+export class UserEntity {
   @PrimaryColumn()
   uuid: string;
 
@@ -72,6 +72,32 @@ export class UserDto {
   business_instagram_username: string;
 
   @Column({ nullable: true })
+  business_twitter_username: string;
+}
+
+export interface UserDto {
+  email: string;
+  password: string;
+  type: string;
+  first_name: string;
+  last_name: string;
+  persian_first_name: string;
+  persian_last_name: string;
+  national_id_number: string;
+  national_registration_code: string;
+  date_of_birth: string;
+  instagram_username: string;
+  twitter_username: string;
+  gender: string;
+  marital_status: string;
+  mobile_phone_number: string;
+  country_of_residence: string;
+  state_of_residence: string;
+  city_of_residence: string;
+  address_of_residence: string;
+  postal_code: string;
+  business_name: string;
+  business_instagram_username: string;
   business_twitter_username: string;
 }
 
