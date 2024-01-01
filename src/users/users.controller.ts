@@ -11,10 +11,10 @@ export class UsersController {
     return null;
   }
 
-  @Get('/:uuid')
+  /*@Get('/:uuid')
   async findUserById(@Param('uuid') uuid: string): Promise<UserDto | null> {
     return await this.usersService.findUserById(uuid);
-  }
+  }*/
 
   @Post('create')
   async createUser(@Body() userEntity: CreateUserDto) {
