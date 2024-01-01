@@ -12,7 +12,7 @@ export class UsersController {
   }
 
   @Get('/:uuid')
-  async findUserById(@Param('uuid') uuid: string): Promise<CreateUserDto | null> {
+  async findUserById(@Param('uuid') uuid: string): Promise<UserDto | null> {
     return await this.usersService.findUserById(uuid);
   }
 

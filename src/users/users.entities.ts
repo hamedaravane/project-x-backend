@@ -1,8 +1,25 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('user')
+enum UserType {
+  BUSINESS = 'business',
+  INFLUENCER = 'influencer',
+}
+
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+enum MaritalStatus {
+  MARRIED = 'married',
+  SINGLE = 'single',
+  DIVORCED = 'divorced',
+  WIDOWED = 'widowed',
+}
+
+@Entity('user', {database: 'test'})
 export class UserEntity {
-  @PrimaryColumn()
+  @PrimaryColumn('uuid')
   uuid: string;
 
   @Column()
@@ -11,8 +28,8 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
-  type: string;
+  @Column({ type: 'enum', enum: UserType, nullable: false})
+  type: UserType;
 
   @Column()
   first_name: string;
@@ -26,11 +43,17 @@ export class UserEntity {
   @Column()
   persian_last_name: string;
 
-  @Column()
+  @Column({nullable: true})
   national_id_number: string;
 
-  @Column()
+  @Column({nullable: true})
   national_registration_code: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @Column()
   date_of_birth: Date;
@@ -157,21 +180,4 @@ export function convertUserDtoToUserEntity(data: CreateUserDto): UserEntity {
     business_instagram_username: data.business_instagram_username,
     business_twitter_username: data.business_twitter_username
   }
-}
-
-enum UserType {
-  BUSINESS = 'business',
-  INFLUENCER = 'influencer',
-}
-
-enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-}
-
-enum MaritalStatus {
-  MARRIED = 'married',
-  SINGLE = 'single',
-  DIVORCED = 'divorced',
-  WIDOWED = 'widowed',
 }
