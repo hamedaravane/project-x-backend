@@ -75,7 +75,7 @@ export class UserEntity {
   business_twitter_username: string;
 }
 
-export interface UserDto {
+export interface CreateUserDto {
   email: string;
   password: string;
   type: string;
@@ -130,7 +130,34 @@ export interface User {
 
 // export function convertUserDomainToDto {}
 
-// export function convertUserDtoToDomain {}
+export function convertUserDtoToUserEntity(data: CreateUserDto): UserEntity {
+  return {
+    uuid: crypto.randomUUID(),
+    email: data.email,
+    password: data.password,
+    type: data.type,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    persian_first_name: data.persian_first_name,
+    persian_last_name: data.persian_last_name,
+    national_id_number: data.national_id_number,
+    national_registration_code: data.national_registration_code,
+    date_of_birth: new Date(data.date_of_birth),
+    instagram_username: data.instagram_username,
+    twitter_username: data.twitter_username,
+    gender: data.gender,
+    marital_status: MaritalStatus[data.marital_status],
+    mobile_phone_number: data.mobile_phone_number,
+    country_of_residence: data.country_of_residence,
+    state_of_residence: data.state_of_residence,
+    city_of_residence: data.city_of_residence,
+    address_of_residence: data.address_of_residence,
+    postal_code: data.postal_code,
+    business_name: data.business_name,
+    business_instagram_username: data.business_instagram_username,
+    business_twitter_username: data.business_twitter_username
+  }
+}
 
 enum UserType {
   BUSINESS = 'business',

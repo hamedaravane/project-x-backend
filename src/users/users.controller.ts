@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { UserDto } from "./users.entities";
+import { CreateUserDto } from "./users.entities";
 import { UsersService } from "./users.service";
 
 @Controller('users')
@@ -7,17 +7,17 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAllUsers(): UserDto[] | null {
+  findAllUsers(): CreateUserDto[] | null {
     return null;
   }
 
   @Get('/:uuid')
-  async findUserById(@Param('uuid') uuid: string): Promise<UserDto | null> {
+  async findUserById(@Param('uuid') uuid: string): Promise<CreateUserDto | null> {
     return await this.usersService.findUserById(uuid);
   }
 
   @Post('create')
-  async createUser(@Body() userEntity: UserDto) {
+  async createUser(@Body() userEntity: CreateUserDto) {
     console.log(userEntity);
     return await this.usersService.registerUser(userEntity);
   }
