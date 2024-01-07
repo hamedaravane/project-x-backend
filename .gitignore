@@ -37,6 +37,9 @@ lerna-debug.log*
 # Lock files
 yarn.lock
 package-lock.json
+.yarn
+.pnp.loader.mjs
+.pnp.cjs
 
 # environments
 .env.development.local

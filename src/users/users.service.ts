@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { convertUserDtoToUserEntity, CreateUserDto, UserEntity } from './users.entities';
+import {
+  convertUserDtoToUserEntity,
+  CreateUserDto,
+  UserEntity,
+} from './users.entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

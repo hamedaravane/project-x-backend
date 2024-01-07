@@ -1,4 +1,12 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import {
   IsAlpha,
   IsDate,
@@ -15,7 +23,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import {v4 as uuid} from 'UUID';
+import { v4 as uuid } from 'uuid';
 
 enum UserType {
   BUSINESS = 'business',
@@ -51,28 +59,41 @@ export class UserEntity {
 
   @Column()
   @IsString()
-  @IsAlpha(
-    'en-US', { message: 'First name must only contain alphabetical characters' })
-  @Length(1, 255, { message: 'First name must be between 1 and 255 characters long' })
+  @IsAlpha('en-US', {
+    message: 'First name must only contain alphabetical characters',
+  })
+  @Length(1, 255, {
+    message: 'First name must be between 1 and 255 characters long',
+  })
   first_name: string;
 
   @Column()
   @IsString()
-  @IsAlpha(
-    'en-US', { message: 'Last name must only contain alphabetical characters' })
-  @Length(1, 255, { message: 'Last name must be between 1 and 255 characters long' })
+  @IsAlpha('en-US', {
+    message: 'Last name must only contain alphabetical characters',
+  })
+  @Length(1, 255, {
+    message: 'Last name must be between 1 and 255 characters long',
+  })
   last_name: string;
 
   @Column()
-  @IsAlpha(
-    'fa-IR', { message: 'Persian name must only contain persian alphabetical characters' })
-  @Length(1, 255, { message: 'Persian name must be between 1 and 255 characters long' })
+  @IsAlpha('fa-IR', {
+    message: 'Persian name must only contain persian alphabetical characters',
+  })
+  @Length(1, 255, {
+    message: 'Persian name must be between 1 and 255 characters long',
+  })
   persian_first_name: string;
 
   @Column()
-  @IsAlpha(
-    'fa-IR', { message: 'Persian last name must only contain persian alphabetical characters' })
-  @Length(1, 255, { message: 'Persian last name must be between 1 and 255 characters long' })
+  @IsAlpha('fa-IR', {
+    message:
+      'Persian last name must only contain persian alphabetical characters',
+  })
+  @Length(1, 255, {
+    message: 'Persian last name must be between 1 and 255 characters long',
+  })
   persian_last_name: string;
 
   @Column({ nullable: true, unique: true })
@@ -91,21 +112,34 @@ export class UserEntity {
   date_of_birth: Date;
 
   @Column({ length: 30, unique: true })
-  @Length(1, 30, { message: 'Instagram username must be between 1 and 30 characters long' })
-  @Matches(/^[a-zA-Z0-9._]+$/, { message: 'Invalid characters in Instagram username' })
+  @Length(1, 30, {
+    message: 'Instagram username must be between 1 and 30 characters long',
+  })
+  @Matches(/^[a-zA-Z0-9._]+$/, {
+    message: 'Invalid characters in Instagram username',
+  })
   instagram_username: string;
 
   @Column({ length: 15, unique: true, nullable: true })
   @IsString({ message: 'Twitter username must be a string' })
-  @Length(1, 15, { message: 'Twitter username must be between 1 and 15 characters long' })
-  @Matches(/^[a-zA-Z0-9_]+$/, { message: 'Invalid characters in Twitter username' })
+  @Length(1, 15, {
+    message: 'Twitter username must be between 1 and 15 characters long',
+  })
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Invalid characters in Twitter username',
+  })
   twitter_username: string;
 
   @Column({ type: 'enum', enum: Gender, default: Gender.MALE, nullable: false })
   @IsEnum(Gender, { message: 'Invalid gender' })
   gender: Gender;
 
-  @Column({ type: 'enum', enum: MaritalStatus, default: MaritalStatus.SINGLE, nullable: true })
+  @Column({
+    type: 'enum',
+    enum: MaritalStatus,
+    default: MaritalStatus.SINGLE,
+    nullable: true,
+  })
   @IsEnum(MaritalStatus, { message: 'Invalid marital status' })
   marital_status: MaritalStatus;
 
@@ -134,8 +168,12 @@ export class UserEntity {
 
   @Column({ length: 30, unique: true, nullable: true })
   @IsString({ message: 'Instagram username must be a string' })
-  @Length(1, 30, { message: 'Instagram username must be between 1 and 30 characters long' })
-  @Matches(/^[a-zA-Z0-9._]+$/, { message: 'Invalid characters in Instagram username' })
+  @Length(1, 30, {
+    message: 'Instagram username must be between 1 and 30 characters long',
+  })
+  @Matches(/^[a-zA-Z0-9._]+$/, {
+    message: 'Invalid characters in Instagram username',
+  })
   business_instagram_username: string;
 
   @Column({ nullable: true })
@@ -146,7 +184,11 @@ export class UserEntity {
     const birthDate = new Date(this.date_of_birth);
     let age = today.getFullYear() - birthDate.getFullYear();
 
-    if (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
+    if (
+      today.getMonth() < birthDate.getMonth() ||
+      (today.getMonth() === birthDate.getMonth() &&
+        today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
 
@@ -165,13 +207,16 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @IsStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-  }, { message: 'password is not strong enough' })
+  @IsStrongPassword(
+    {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    },
+    { message: 'password is not strong enough' },
+  )
   password: string;
 
   @IsEnum(UserType)
@@ -179,12 +224,12 @@ export class CreateUserDto {
   type: UserType;
 
   @IsString()
-  @Transform(({ value } ) => value.charAt(0)?.toUpperCase() + value.slice(1))
+  @Transform(({ value }) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
   first_name: string;
 
   @IsString()
-  @Transform(({ value } ) => value.charAt(0)?.toUpperCase() + value.slice(1))
+  @Transform(({ value }) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
   last_name: string;
 
@@ -201,13 +246,17 @@ export class CreateUserDto {
   national_registration_code: string | null;
 
   @IsDate({ message: 'Incorrect value for birth date' })
-  @IsNotEmpty({message: 'Date of Birth should not be empty'})
+  @IsNotEmpty({ message: 'Date of Birth should not be empty' })
   date_of_birth: Date;
 
   @IsString()
   @IsNotEmpty()
-  @Length(1, 30, { message: 'Instagram username must be between 1 and 30 characters long' })
-  @Matches(/^[a-zA-Z0-9._]+$/, { message: 'Invalid characters in Instagram username' })
+  @Length(1, 30, {
+    message: 'Instagram username must be between 1 and 30 characters long',
+  })
+  @Matches(/^[a-zA-Z0-9._]+$/, {
+    message: 'Invalid characters in Instagram username',
+  })
   instagram_username: string;
 
   twitter_username: string | null;
@@ -218,7 +267,7 @@ export class CreateUserDto {
   @IsEnum(MaritalStatus)
   marital_status: MaritalStatus | null;
 
-  @IsMobilePhone(undefined, {strictMode: true})
+  @IsMobilePhone(undefined, { strictMode: true })
   mobile_phone_number: string;
 
   country_of_residence: string | null;
@@ -239,7 +288,9 @@ export class CreateUserDto {
   business_twitter_username: string | null;
 }
 
-export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEntity {
+export function convertUserDtoToUserEntity(
+  createUserDto: CreateUserDto,
+): UserEntity {
   const userEntity = new UserEntity();
 
   userEntity.email = createUserDto.email;
@@ -250,7 +301,8 @@ export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEn
   userEntity.persian_first_name = createUserDto.persian_first_name;
   userEntity.persian_last_name = createUserDto.persian_last_name;
   userEntity.national_id_number = createUserDto.national_id_number;
-  userEntity.national_registration_code = createUserDto.national_registration_code;
+  userEntity.national_registration_code =
+    createUserDto.national_registration_code;
   userEntity.date_of_birth = createUserDto.date_of_birth;
   userEntity.instagram_username = createUserDto.instagram_username;
   userEntity.twitter_username = createUserDto.twitter_username;
@@ -262,8 +314,10 @@ export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEn
   userEntity.address_of_residence = createUserDto.address_of_residence;
   userEntity.postal_code = createUserDto.postal_code;
   userEntity.business_name = createUserDto.business_name;
-  userEntity.business_instagram_username = createUserDto.business_instagram_username;
-  userEntity.business_twitter_username = createUserDto.business_twitter_username;
+  userEntity.business_instagram_username =
+    createUserDto.business_instagram_username;
+  userEntity.business_twitter_username =
+    createUserDto.business_twitter_username;
 
   return userEntity;
 }

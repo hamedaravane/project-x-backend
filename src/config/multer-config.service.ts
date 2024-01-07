@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { MulterModuleOptions, MulterOptionsFactory } from '@nestjs/platform-express';
+import {
+  MulterModuleOptions,
+  MulterOptionsFactory,
+} from '@nestjs/platform-express';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
@@ -12,11 +15,11 @@ export class MulterConfigService implements MulterOptionsFactory {
           const identifier = `${crypto.randomUUID()}-${Math.random()}-${Date.now()}`;
           const fileName = `${file.originalname}-${identifier}`;
           callback(null, fileName);
-        }
+        },
       },
       limits: {
-        fileSize: 1024 * 1024 * 2
-      }
-    }
+        fileSize: 1024 * 1024 * 2,
+      },
+    };
   }
 }

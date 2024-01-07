@@ -10,13 +10,16 @@ import { TypeOrmConfigService } from './config/type-orm-config.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['environment/.env.development.local', 'environment/.env.development'],
+      envFilePath: [
+        'environment/.env.development.local',
+        'environment/.env.development',
+      ],
       isGlobal: true,
       load: [databaseConfig],
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService
+      useClass: TypeOrmConfigService,
     }),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
