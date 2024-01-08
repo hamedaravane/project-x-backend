@@ -41,6 +41,4 @@ package-lock.json
 .pnp.loader.mjs
 .pnp.cjs
 
-# environments
-.env.development.local
-environment
+environment/**
