@@ -5,11 +5,20 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint/eslint-plugin", "@darraghor/nestjs-typed"],
+  "plugins": [
+    "@typescript-eslint/eslint-plugin",
+    "@darraghor/nestjs-typed",
+    "unused-imports",
+    "prettier"
+  ],
   "extends": [
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:@darraghor/nestjs-typed/recommended"
+    "plugin:import/typescript",
+    "plugin:import/errors",
+    "prettier",
+    "plugin:@darraghor/nestjs-typed/recommended",
+    "plugin:@darraghor/nestjs-typed/no-swagger"
   ],
   "root": true,
   "env": {
@@ -17,22 +26,38 @@
     "jest": true
   },
   "rules": {
+    "no-confusing-arrow": ["error", { "allowParens": false }],
+    "no-tabs": ["error", {"allowIndentationTabs": true}],
+    "indent": ["error", 2],
     "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "import/no-unresolved": "error",
-    "import/named": "error",
-    "import/namespace": ["error", { "allowComputed": true }],
-    "import/default": "error",
-    "import/no-unused-modules": "warn",
-    "import/no-duplicates": "error",
-    "import/order": [
+    "unused-imports/no-unused-imports": "error",
+    "lines-around-comment": [
       "error",
       {
-        "groups": ["builtin", "external", "internal"]
+        "beforeBlockComment": true,
+        "afterBlockComment": true,
+        "beforeLineComment": true,
+        "afterLineComment": true,
+        "allowBlockStart": true,
+        "allowBlockEnd": true,
+        "allowObjectStart": true,
+        "allowObjectEnd": true,
+        "allowArrayStart": true,
+        "allowArrayEnd": true
       }
     ],
-    "prettier/prettier": "error"
-  }
+    "semi": ["error", "always"],
+    "quotes": ["error", "single", {"allowTemplateLiterals": true}]
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

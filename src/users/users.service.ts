@@ -1,11 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import {
-  convertUserDtoToUserEntity,
-  CreateUserDto,
-  UserEntity,
-} from './users.entities';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {CreateUserDto, UserEntity, convertUserDtoToUserEntity} from './users.entities';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +11,7 @@ export class UsersService {
   ) {}
 
   async findUserById(id: string): Promise<UserEntity | null> {
-    return await this.userRepository.findOneBy({ uuid: id });
+    return await this.userRepository.findOneBy({uuid: id});
   }
 
   async registerUser(userDto: CreateUserDto) {
