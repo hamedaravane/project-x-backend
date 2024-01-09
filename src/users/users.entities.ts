@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
-import {Transform} from 'class-transformer';
+import {Transform, Type} from 'class-transformer';
 import {
+  Allow,
   IsAlpha,
   IsDate,
   IsEmail,
@@ -35,17 +36,21 @@ enum MaritalStatus {
 
 @Entity('user', {database: 'test'})
 export class UserEntity {
+  @IsString()
   @PrimaryColumn({nullable: false, unique: true, type: 'uuid'})
-    uuid = uuid();
+  uuid = uuid();
 
+  @IsString()
   @Column({unique: true, nullable: false})
-    email: string;
+  email: string;
 
+  @IsString()
   @Column()
-    password: string;
+  password: string;
 
+  @IsEnum(UserType)
   @Column({type: 'enum', enum: UserType, nullable: false})
-    type: UserType;
+  type: UserType;
 
   @Column()
   @IsString()
@@ -55,7 +60,7 @@ export class UserEntity {
   @Length(1, 255, {
     message: 'First name must be between 1 and 255 characters long',
   })
-    first_name: string;
+  first_name: string;
 
   @Column()
   @IsString()
@@ -65,7 +70,7 @@ export class UserEntity {
   @Length(1, 255, {
     message: 'Last name must be between 1 and 255 characters long',
   })
-    last_name: string;
+  last_name: string;
 
   @Column()
   @IsAlpha('fa-IR', {
@@ -74,7 +79,7 @@ export class UserEntity {
   @Length(1, 255, {
     message: 'Persian name must be between 1 and 255 characters long',
   })
-    persian_first_name: string;
+  persian_first_name: string;
 
   @Column()
   @IsAlpha('fa-IR', {
@@ -83,22 +88,30 @@ export class UserEntity {
   @Length(1, 255, {
     message: 'Persian last name must be between 1 and 255 characters long',
   })
-    persian_last_name: string;
+  persian_last_name: string;
 
+  @Allow()
   @Column({nullable: true, unique: true})
-    national_id_number: string;
+  national_id_number: string;
 
+  @Allow()
   @Column({nullable: true, unique: true})
-    national_registration_code: string;
+  national_registration_code: string;
 
+  @IsDate()
+  @Type(() => Date)
   @CreateDateColumn()
-    created_at: Date;
+  created_at: Date;
 
+  @IsDate()
+  @Type(() => Date)
   @UpdateDateColumn()
-    updated_at: Date;
+  updated_at: Date;
 
+  @IsDate()
+  @Type(() => Date)
   @Column()
-    date_of_birth: Date;
+  date_of_birth: Date;
 
   @Column({length: 30, unique: true})
   @Length(1, 30, {
@@ -107,7 +120,7 @@ export class UserEntity {
   @Matches(/^[a-zA-Z0-9._]+$/, {
     message: 'Invalid characters in Instagram username',
   })
-    instagram_username: string;
+  instagram_username: string;
 
   @Column({length: 15, unique: true, nullable: true})
   @IsString({message: 'Twitter username must be a string'})
@@ -117,11 +130,11 @@ export class UserEntity {
   @Matches(/^[a-zA-Z0-9_]+$/, {
     message: 'Invalid characters in Twitter username',
   })
-    twitter_username: string;
+  twitter_username: string;
 
   @Column({type: 'enum', enum: Gender, default: Gender.MALE, nullable: false})
   @IsEnum(Gender, {message: 'Invalid gender'})
-    gender: Gender;
+  gender: Gender;
 
   @Column({
     type: 'enum',
@@ -130,30 +143,36 @@ export class UserEntity {
     nullable: true,
   })
   @IsEnum(MaritalStatus, {message: 'Invalid marital status'})
-    marital_status: MaritalStatus;
+  marital_status: MaritalStatus;
 
   @Column({length: 15, unique: true})
   @IsString({message: 'Mobile phone number must be a string'})
   @IsMobilePhone(undefined, {strictMode: true})
-    mobile_phone_number: string;
+  mobile_phone_number: string;
 
+  @Allow()
   @Column({nullable: true})
-    country_of_residence: string;
+  country_of_residence: string;
 
+  @Allow()
   @Column({nullable: true})
-    state_of_residence: string;
+  state_of_residence: string;
 
+  @Allow()
   @Column()
-    city_of_residence: string;
+  city_of_residence: string;
 
+  @Allow()
   @Column({nullable: true})
-    address_of_residence: string;
+  address_of_residence: string;
 
+  @Allow()
   @Column({nullable: true})
-    postal_code: string;
+  postal_code: string;
 
+  @Allow()
   @Column({nullable: true})
-    business_name: string;
+  business_name: string;
 
   @Column({length: 30, unique: true, nullable: true})
   @IsString({message: 'Instagram username must be a string'})
@@ -163,10 +182,11 @@ export class UserEntity {
   @Matches(/^[a-zA-Z0-9._]+$/, {
     message: 'Invalid characters in Instagram username',
   })
-    business_instagram_username: string;
+  business_instagram_username: string;
 
+  @Allow()
   @Column({nullable: true})
-    business_twitter_username: string;
+  business_twitter_username: string;
 
   get age(): number {
     const today = new Date();
@@ -192,7 +212,7 @@ export class UserEntity {
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
-    email: string;
+  email: string;
 
   @IsString()
   @IsStrongPassword(
@@ -205,37 +225,40 @@ export class CreateUserDto {
     },
     {message: 'password is not strong enough'},
   )
-    password: string;
+  password: string;
 
   @IsEnum(UserType)
   @IsNotEmpty()
-    type: UserType;
+  type: UserType;
 
   @IsString()
   @Transform(({value}) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
-    first_name: string;
+  first_name: string;
 
   @IsString()
   @Transform(({value}) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
-    last_name: string;
+  last_name: string;
 
   @IsString()
   @IsNotEmpty()
-    persian_first_name: string;
+  persian_first_name: string;
 
   @IsString()
   @IsNotEmpty()
-    persian_last_name: string;
+  persian_last_name: string;
 
+  @Allow()
   national_id_number: string | null;
 
+  @Allow()
   national_registration_code: string | null;
 
+  @Type(() => Date)
   @IsDate({message: 'Incorrect value for birth date'})
   @IsNotEmpty({message: 'Date of Birth should not be empty'})
-    date_of_birth: Date;
+  date_of_birth: Date;
 
   @IsString()
   @IsNotEmpty()
@@ -245,34 +268,42 @@ export class CreateUserDto {
   @Matches(/^[a-zA-Z0-9._]+$/, {
     message: 'Invalid characters in Instagram username',
   })
-    instagram_username: string;
+  instagram_username: string;
 
+  @Allow()
   twitter_username: string | null;
 
   @IsEnum(Gender)
-    gender: Gender;
+  gender: Gender;
 
   @IsEnum(MaritalStatus)
-    marital_status: MaritalStatus | null;
+  marital_status: MaritalStatus | null;
 
   @IsMobilePhone(undefined, {strictMode: true})
-    mobile_phone_number: string;
+  mobile_phone_number: string;
 
+  @Allow()
   country_of_residence: string | null;
 
+  @Allow()
   state_of_residence: string | null;
-  @IsString()
-    city_of_residence: string;
 
   @IsString()
-    address_of_residence: string;
+  city_of_residence: string;
 
+  @IsString()
+  address_of_residence: string;
+
+  @Allow()
   postal_code: string | null;
 
+  @Allow()
   business_name: string | null;
 
+  @Allow()
   business_instagram_username: string | null;
 
+  @Allow()
   business_twitter_username: string | null;
 }
 
