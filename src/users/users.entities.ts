@@ -34,7 +34,38 @@ enum MaritalStatus {
   WIDOWED = 'widowed',
 }
 
-@Entity('user', {database: 'test'})
+export enum IndustryValue {
+  CafeAndRestaurant = 'Restaurant & Cafe',
+  Beauty = 'Beauty',
+  Fashion = 'Fashion',
+  Fitness = 'Fitness',
+  Retail = 'Retail',
+  Bookstore = 'Bookstore',
+  Grocery = 'Grocery',
+  Cinema = 'Cinema',
+  Jewelry = 'Jewelry',
+  Pharmacy = 'Pharmacy',
+  Flower = 'Flower',
+  Other = 'Other',
+}
+
+export enum ProfessionEnum {
+  Food = 'Food',
+  Beauty = 'Beauty',
+  Fashion = 'Fashion',
+  Society = 'Society',
+  Art = 'Art',
+  Musician = 'Musician',
+  Fitness = 'Fitness',
+  Medical = 'Medical',
+  Reporter = 'Reporter',
+  Actor = 'Actor',
+  Book = 'Book',
+  Jewelry = 'Jewelry',
+  Other = 'Other',
+}
+
+@Entity('user')
 export class UserEntity {
   @IsString()
   @PrimaryColumn({nullable: false, unique: true, type: 'uuid'})
@@ -51,6 +82,14 @@ export class UserEntity {
   @IsEnum(UserType)
   @Column({type: 'enum', enum: UserType, nullable: false})
   type: UserType;
+
+  @IsEnum(ProfessionEnum)
+  @IsNotEmpty()
+  influencer_type: ProfessionEnum;
+
+  @IsEnum(IndustryValue)
+  @IsNotEmpty()
+  business_type: IndustryValue;
 
   @Column()
   @IsString()
@@ -209,6 +248,12 @@ export class UserEntity {
   }
 }
 
+/**
+ * Data Transfer Object (DTO) for creating a new user.
+ * This class defines the structure and validation rules for the data required to create a new user.
+ * @class
+ */
+
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
@@ -229,7 +274,15 @@ export class CreateUserDto {
 
   @IsEnum(UserType)
   @IsNotEmpty()
-  type: UserType;
+  user_type: UserType;
+
+  @IsEnum(ProfessionEnum)
+  @IsNotEmpty()
+  influencer_type: ProfessionEnum;
+
+  @IsEnum(IndustryValue)
+  @IsNotEmpty()
+  business_type: IndustryValue;
 
   @IsString()
   @Transform(({value}) => value.charAt(0)?.toUpperCase() + value.slice(1))
@@ -312,6 +365,9 @@ export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEn
 
   userEntity.email = createUserDto.email;
   userEntity.password = createUserDto.password;
+  userEntity.type = createUserDto.user_type;
+  userEntity.influencer_type = createUserDto.influencer_type;
+  userEntity.business_type = createUserDto.business_type;
   userEntity.gender = createUserDto.gender;
   userEntity.first_name = createUserDto.first_name;
   userEntity.last_name = createUserDto.last_name;
