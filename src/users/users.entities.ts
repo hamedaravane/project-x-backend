@@ -12,6 +12,7 @@ import {
   IsStrongPassword,
   Length,
   Matches,
+  ValidateIf,
 } from 'class-validator';
 import {BeforeInsert, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn} from 'typeorm';
 import {v4 as uuid} from 'uuid';
@@ -278,28 +279,46 @@ export class CreateUserDto {
 
   @IsEnum(ProfessionEnum)
   @IsNotEmpty()
+  @ValidateIf(object => {
+    return object.user_type === UserType.INFLUENCER;
+  })
   influencer_type: ProfessionEnum;
 
   @IsEnum(IndustryValue)
   @IsNotEmpty()
-  business_type: IndustryValue;
+  @ValidateIf(object => {
+    return object.user_type === UserType.BUSINESS;
+  })
+  business_industry: IndustryValue;
 
   @IsString()
   @Transform(({value}) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
+  @ValidateIf(object => {
+    return object.user_type === UserType.INFLUENCER;
+  })
   first_name: string;
 
   @IsString()
   @Transform(({value}) => value.charAt(0)?.toUpperCase() + value.slice(1))
   @IsNotEmpty()
+  @ValidateIf(object => {
+    return object.user_type === UserType.INFLUENCER;
+  })
   last_name: string;
 
   @IsString()
   @IsNotEmpty()
+  @ValidateIf(object => {
+    return object.user_type === UserType.INFLUENCER;
+  })
   persian_first_name: string;
 
   @IsString()
   @IsNotEmpty()
+  @ValidateIf(object => {
+    return object.user_type === UserType.INFLUENCER;
+  })
   persian_last_name: string;
 
   @Allow()
@@ -311,7 +330,7 @@ export class CreateUserDto {
   @Type(() => Date)
   @IsDate({message: 'Incorrect value for birth date'})
   @IsNotEmpty({message: 'Date of Birth should not be empty'})
-  date_of_birth: Date;
+  birth_date: Date;
 
   @IsString()
   @IsNotEmpty()
@@ -321,31 +340,34 @@ export class CreateUserDto {
   @Matches(/^[a-zA-Z0-9._]+$/, {
     message: 'Invalid characters in Instagram username',
   })
-  instagram_username: string;
+  instagram_account: string;
 
   @Allow()
-  twitter_username: string | null;
+  twitter_account: string | null;
 
   @IsEnum(Gender)
   gender: Gender;
 
-  @IsEnum(MaritalStatus)
+  @Allow()
   marital_status: MaritalStatus | null;
 
   @IsMobilePhone(undefined, {strictMode: true})
   mobile_phone_number: string;
 
   @Allow()
-  country_of_residence: string | null;
+  country: string | null;
 
   @Allow()
-  state_of_residence: string | null;
+  state: string | null;
 
   @IsString()
-  city_of_residence: string;
+  city: string;
 
   @IsString()
-  address_of_residence: string;
+  @ValidateIf(object => {
+    return object.user_type === UserType.BUSINESS;
+  })
+  address: string;
 
   @Allow()
   postal_code: string | null;
@@ -367,7 +389,7 @@ export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEn
   userEntity.password = createUserDto.password;
   userEntity.type = createUserDto.user_type;
   userEntity.influencer_type = createUserDto.influencer_type;
-  userEntity.business_type = createUserDto.business_type;
+  userEntity.business_type = createUserDto.business_industry;
   userEntity.gender = createUserDto.gender;
   userEntity.first_name = createUserDto.first_name;
   userEntity.last_name = createUserDto.last_name;
@@ -375,21 +397,25 @@ export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEn
   userEntity.persian_last_name = createUserDto.persian_last_name;
   userEntity.national_id_number = createUserDto.national_id_number;
   userEntity.national_registration_code = createUserDto.national_registration_code;
-  userEntity.date_of_birth = createUserDto.date_of_birth;
-  userEntity.instagram_username = createUserDto.instagram_username;
-  userEntity.twitter_username = createUserDto.twitter_username;
+  userEntity.date_of_birth = createUserDto.birth_date;
+  userEntity.instagram_username = createUserDto.instagram_account;
+  userEntity.twitter_username = createUserDto.twitter_account;
   userEntity.marital_status = createUserDto.marital_status;
   userEntity.mobile_phone_number = createUserDto.mobile_phone_number;
-  userEntity.country_of_residence = createUserDto.country_of_residence;
-  userEntity.state_of_residence = createUserDto.state_of_residence;
-  userEntity.city_of_residence = createUserDto.city_of_residence;
-  userEntity.address_of_residence = createUserDto.address_of_residence;
+  userEntity.country_of_residence = createUserDto.country;
+  userEntity.state_of_residence = createUserDto.state;
+  userEntity.city_of_residence = createUserDto.city;
+  userEntity.address_of_residence = createUserDto.address;
   userEntity.postal_code = createUserDto.postal_code;
   userEntity.business_name = createUserDto.business_name;
   userEntity.business_instagram_username = createUserDto.business_instagram_username;
   userEntity.business_twitter_username = createUserDto.business_twitter_username;
 
   return userEntity;
+}
+
+export interface CreateUserResponse {
+  email: string;
 }
 
 export interface User {

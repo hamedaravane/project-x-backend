@@ -1,5 +1,6 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
-import {UserEntity} from './users.entities';
+import {Body, Controller, Get, HttpException, HttpStatus, Post} from '@nestjs/common';
+import {ResponseEntities} from '../shared/response.entities';
+import {CreateUserResponse} from './users.entities';
 import {CreateUserDto} from './users.entities';
 import {UsersService} from './users.service';
 
@@ -21,14 +22,18 @@ export class UsersController {
    * Create a new user.
    * @description This endpoint allows the creation of a new user by accepting user data through the request body.
    * @param {CreateUserDto} createUserDto - The data object containing information for creating a new user.
-   * @returns {Promise<UserEntity>} A promise that resolves to the created UserEntity if successful.
+   * @returns {Promise<ResponseEntities<CreateUserResponse>>} A promise that resolves to the created UserEntity if successful.
    * @author Hamed Arghavan
    */
 
   @Post('create')
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<ResponseEntities<CreateUserResponse>> {
     console.log(createUserDto);
-    return await this.usersService.registerUser(createUserDto);
+    try {
+      return await this.usersService.registerUser(createUserDto);
+    } catch (error) {
+      throw new HttpException(error.message || 'Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Post('photo')
