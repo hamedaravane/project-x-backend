@@ -6,6 +6,7 @@ import databaseConfig from './config/database.config';
 import {MulterConfigService} from './config/multer-config.service';
 import {TypeOrmConfigService} from './config/type-orm-config.service';
 import {UsersModule} from './users/users.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import {UsersModule} from './users/users.module';
       useClass: MulterConfigService,
     }),
     UsersModule,
+    SharedModule,
   ],
   controllers: [],
   providers: [],

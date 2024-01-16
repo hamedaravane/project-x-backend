@@ -1,5 +1,5 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Post} from '@nestjs/common';
-import {ResponseEntities} from '../shared/response.entities';
+import {Body, Controller, Get, HttpException, HttpStatus, Post, UploadedFile} from '@nestjs/common';
+import {ApiResponse} from '../shared/api-response.model';
 import {CreateUserResponse} from './users.entities';
 import {CreateUserDto} from './users.entities';
 import {UsersService} from './users.service';
@@ -22,12 +22,12 @@ export class UsersController {
    * Create a new user.
    * @description This endpoint allows the creation of a new user by accepting user data through the request body.
    * @param {CreateUserDto} createUserDto - The data object containing information for creating a new user.
-   * @returns {Promise<ResponseEntities<CreateUserResponse>>} A promise that resolves to the created UserEntity if successful.
+   * @returns {Promise<ApiResponse<CreateUserResponse>>} A promise that resolves to the created UserEntity if successful.
    * @author Hamed Arghavan
    */
 
   @Post('create')
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<ResponseEntities<CreateUserResponse>> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
     console.log(createUserDto);
     try {
       return await this.usersService.registerUser(createUserDto);
@@ -37,11 +37,8 @@ export class UsersController {
   }
 
   @Post('photo')
-  async uploadProfilePhoto(@Body() data: {profilePhoto: string}): Promise<{message: string}> {
-    const profilePhotoBlob = new Blob([data.profilePhoto], {type: 'image'});
-    const identifier = `${crypto.randomUUID()}-${Math.random()}-${Date.now()}`;
-    const fileName = `profile-photo-${identifier}.png`;
-
+  async uploadProfilePhoto(@UploadedFile() file: Express.Multer.File): Promise<{message: string}> {
+    console.log(file);
     return {message: 'Profile photo uploaded successfully'};
   }
 }

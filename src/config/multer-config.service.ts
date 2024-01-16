@@ -8,14 +8,11 @@ export class MulterConfigService implements MulterOptionsFactory {
       dest: './uploads',
       storage: {
         destination: './photos/profile',
-        fileName: (req, file, callback) => {
+        fileName: (req, file, callback): void => {
           const identifier = `${crypto.randomUUID()}-${Math.random()}-${Date.now()}`;
           const fileName = `${file.originalname}-${identifier}`;
           callback(null, fileName);
         },
-      },
-      limits: {
-        fileSize: 1024 * 1024 * 2,
       },
     };
   }
