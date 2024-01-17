@@ -40,7 +40,7 @@ export class UsersController {
   @Post('photo')
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfilePhoto(@UploadedFile() file: Express.Multer.File): Promise<{message: string}> {
-    console.log(file.destination, file.buffer);
+    console.log(file);
     return {message: 'Profile photo uploaded successfully'};
   }
 }
