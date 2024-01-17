@@ -5,8 +5,9 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
 import {MulterConfigService} from './config/multer-config.service';
 import {TypeOrmConfigService} from './config/type-orm-config.service';
+import {SharedModule} from './shared/shared.module';
 import {UsersModule} from './users/users.module';
-import { SharedModule } from './shared/shared.module';
+import {UsersService} from './users/users.service';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SharedModule } from './shared/shared.module';
       useClass: TypeOrmConfigService,
     }),
     MulterModule.registerAsync({
+      inject: [UsersService],
       useClass: MulterConfigService,
     }),
     UsersModule,

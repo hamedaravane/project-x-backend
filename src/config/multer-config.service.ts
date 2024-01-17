@@ -5,15 +5,28 @@ import {MulterModuleOptions, MulterOptionsFactory} from '@nestjs/platform-expres
 export class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
     return {
-      dest: './uploads',
-      storage: {
-        destination: './photos/profile',
-        fileName: (req, file, callback): void => {
-          const identifier = `${crypto.randomUUID()}-${Math.random()}-${Date.now()}`;
-          const fileName = `${file.originalname}-${identifier}`;
-          callback(null, fileName);
-        },
-      },
+      dest: './upload',
     };
   }
 }
+
+/*@Injectable()
+export class MulterConfigService implements MulterOptionsFactory {
+  createMulterOptions(): MulterModuleOptions {
+    console.log('Creating Multer options...');
+    return {
+      dest: './uploads',
+      storage: {
+        destination: 'mos',
+        filename: 'kos',
+      },
+      limits: {
+        fieldNameSize: 100,
+        fieldSize: 3 * 1024 * 1024,
+        fileSize: 2 * 1024 * 1024,
+      },
+      preservePath: true,
+    };
+  }
+}
+*/

@@ -1,4 +1,5 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Post, UploadedFile} from '@nestjs/common';
+import {Body, Controller, Get, HttpException, HttpStatus, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {FileInterceptor} from '@nestjs/platform-express';
 import {ApiResponse} from '../shared/api-response.model';
 import {CreateUserResponse} from './users.entities';
 import {CreateUserDto} from './users.entities';
@@ -37,8 +38,9 @@ export class UsersController {
   }
 
   @Post('photo')
+  @UseInterceptors(FileInterceptor('file'))
   async uploadProfilePhoto(@UploadedFile() file: Express.Multer.File): Promise<{message: string}> {
-    console.log(file);
+    console.log(file.destination, file.buffer);
     return {message: 'Profile photo uploaded successfully'};
   }
 }
