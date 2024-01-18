@@ -1,29 +1,19 @@
 import {Injectable} from '@nestjs/common';
 import {MulterModuleOptions, MulterOptionsFactory} from '@nestjs/platform-express';
-
-/*@Injectable()
-export class MulterConfigService implements MulterOptionsFactory {
-  createMulterOptions(): MulterModuleOptions {
-    return {
-      dest: './upload',
-    };
-  }
-}*/
+import {DiskStorageOptions, diskStorage} from 'multer';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, '/tmp/my-uploads');
+    const options: DiskStorageOptions = {
+      destination: 'uploads/photos/profile',
+      filename: (req, file, callback): void => {
+        const fileExtension = file.mimetype.slice(file.mimetype.indexOf('/') + 1);
+        callback(null, `profile_photo-${new Date().toISOString()}.${fileExtension}`);
       },
-      filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, file.fieldname + '-' + uniqueSuffix);
-      },
-    });
+    };
     return {
-      storage,
+      storage: diskStorage(options),
       limits: {
         fieldNameSize: 100,
         fieldSize: 3 * 1024 * 1024,

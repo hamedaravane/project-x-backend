@@ -26,6 +26,7 @@
     "jest": true
   },
   "rules": {
+    "@darraghor/nestjs-typed/injectable-should-be-provided": "off",
     "no-confusing-arrow": ["error", { "allowParens": false }],
     "no-tabs": ["error", {"allowIndentationTabs": true}],
     "@typescript-eslint/interface-name-prefix": "off",
