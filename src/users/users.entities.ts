@@ -418,6 +418,11 @@ export interface CreateUserResponse {
   email: string;
 }
 
+export interface LoginUser {
+  email: string;
+  password: string;
+}
+
 export interface User {
   uuid: string;
   email: string;
