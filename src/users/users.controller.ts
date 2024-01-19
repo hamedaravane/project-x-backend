@@ -1,4 +1,14 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  FileTypeValidator,
+  Get,
+  HttpException,
+  HttpStatus, MaxFileSizeValidator, ParseFilePipe,
+  Post,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ApiResponse} from '../shared/api-response.model';
 import {CreateUserResponse} from './users.entities';
@@ -39,8 +49,14 @@ export class UsersController {
 
   @Post('photo')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadProfilePhoto(@UploadedFile() file: Express.Multer.File): Promise<{message: string}> {
-    console.log(file);
+  async uploadProfilePhoto(@UploadedFile(
+    new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000 }),
+        new FileTypeValidator({ fileType: 'image/png' }),
+      ],
+    }),
+  ) file: Express.Multer.File): Promise<{message: string}> {
     return {message: 'Profile photo uploaded successfully'};
   }
 }

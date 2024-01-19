@@ -3,6 +3,7 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {ApiResponse} from '../shared/api-response.model';
 import {CreateUserDto, CreateUserResponse, UserEntity, convertUserDtoToUserEntity} from './users.entities';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -11,8 +12,17 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async findUserById(id: string): Promise<UserEntity | null> {
-    return await this.userRepository.findOneBy({uuid: id});
+  async findUserByEmail(email: string): Promise<UserEntity | null> {
+    return await this.userRepository.findOne({where: {email: email}});
+  }
+
+  async validateUser(email: string, password: string): Promise<boolean> {
+    const user = await this.findUserByEmail(email);
+    return bcrypt.compare(password, user.password);
+  }
+
+  async findProfilePhoto(email: string, isValid: boolean) {
+
   }
 
   async registerUser(userDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
