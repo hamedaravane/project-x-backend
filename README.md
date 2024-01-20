@@ -26,10 +26,13 @@ These instructions will help you get a copy of the project up and running on you
    yarn install
    ```
 
-3. Editor support for Yarn:
-
+3. Yarn Tools for project:
+   Good practice to check these for better experience with yarn:
    ```bash
-   yarn dlx @yarnpkg/sdks base
+   yarn dlx @yarnpkg/doctor
+   ```
+   ```bash
+    yarn dlx @yarnpkg/sdks base
    ```
 
 4. Create a `environment` directory in the root of the project.

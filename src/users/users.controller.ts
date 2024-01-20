@@ -62,6 +62,6 @@ export class UsersController {
     return {message: 'Profile photo uploaded successfully'};
   }
 
-  @Post('login')
-  async loginUser(@Body() authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {}
+  /*@Post('login')
+  async loginUser(@Body() authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {}*/
 }
