@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {ApiResponse} from '../shared/api-response.model';
-import {CreateUserDto, CreateUserResponse, UserEntity, convertUserDtoToUserEntity} from './users.entities';
+import {CreateUserDto, CreateUserResponse, UserEntity, convertUserDtoToUserEntity, LoginUser} from './users.entities';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -32,6 +32,14 @@ export class UsersService {
     return {
       success: true,
       data: {email: userEntity.email, message: 'Your account successfully created'},
+      timestamp: new Date(),
+    };
+  }
+
+  async loginUser(authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {
+    return {
+      success: true,
+      data: {email: authInfo.email, message: 'You successfully logged in'},
       timestamp: new Date(),
     };
   }

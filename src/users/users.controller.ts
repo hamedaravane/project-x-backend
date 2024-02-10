@@ -35,7 +35,8 @@ export class UsersController {
    * Create a new user.
    * @description This endpoint allows the creation of a new user by accepting user data through the request body.
    * @param {CreateUserDto} createUserDto - The data object containing information for creating a new user.
-   * @returns {Promise<ApiResponse<CreateUserResponse>>} A promise that resolves to the created UserEntity if successful.
+   * @returns {Promise<ApiResponse<CreateUserResponse>>} A promise that resolves to the created UserEntity if
+   *   successful.
    * @author Hamed Arghavan
    */
 
@@ -57,11 +58,15 @@ export class UsersController {
         validators: [new MaxFileSizeValidator({maxSize: 1000}), new FileTypeValidator({fileType: 'image/png'})],
       }),
     )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     file: Express.Multer.File,
   ): Promise<{message: string}> {
     return {message: 'Profile photo uploaded successfully'};
   }
 
-  /*@Post('login')
-  async loginUser(@Body() authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {}*/
+  @Post('login')
+  async loginUser(@Body() authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {
+    console.log(authInfo);
+    return await this.usersService.loginUser(authInfo);
+  }
 }
