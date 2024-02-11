@@ -1,22 +1,24 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {JwtService} from '@nestjs/jwt';
 import {InjectRepository} from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import {Repository} from 'typeorm';
 import {ApiResponse} from '../shared/api-response.model';
 import {
   CreateUserDto,
   CreateUserResponse,
+  LoginInfo,
+  LoginUserResponse,
   UserEntity,
   convertUserDtoToUserEntity,
-  LoginUser,
-  LoginInfo
 } from './users.entities';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findUserByEmail(email: string): Promise<UserEntity | null> {
@@ -43,10 +45,14 @@ export class UsersService {
     };
   }
 
-  async loginUser(authInfo: LoginInfo): Promise<ApiResponse<CreateUserResponse>> {
+  async loginUser(authInfo: LoginInfo): Promise<ApiResponse<LoginUserResponse>> {
+    if (!(await this.validateUser(authInfo.email, authInfo.password))) {
+      throw new UnauthorizedException();
+    }
+    const payload = {email: authInfo.email};
     return {
       success: true,
-      data: {email: authInfo.email, message: 'You successfully logged in'},
+      data: {token: await this.jwtService.signAsync(payload), message: 'You successfully logged in'},
       timestamp: new Date(),
     };
   }

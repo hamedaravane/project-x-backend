@@ -418,6 +418,10 @@ export interface CreateUserResponse {
   email: string;
 }
 
+export interface LoginUserResponse {
+  token: string;
+}
+
 export class LoginInfo {
   @IsEmail({message: 'email is not in the right format'})
   @IsNotEmpty({message: 'email should not be empty'})
