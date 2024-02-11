@@ -27,12 +27,11 @@ export class UsersService {
 
   async validateUser(email: string, password: string): Promise<boolean> {
     const user = await this.findUserByEmail(email);
+    if (!user) {
+      return false;
+    }
     return bcrypt.compare(password, user.password);
   }
-
-  /*async findProfilePhoto(email: string, isValid: boolean) {
-
-  }*/
 
   async registerUser(userDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
     const userEntity = convertUserDtoToUserEntity(userDto);

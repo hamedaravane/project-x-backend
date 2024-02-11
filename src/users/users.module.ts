@@ -5,6 +5,7 @@ import {MulterConfigService} from '../config/multer-config.service';
 import {UsersController} from './users.controller';
 import {UserEntity} from './users.entities';
 import {UsersService} from './users.service';
+import {JwtModule} from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import {UsersService} from './users.service';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+    JwtModule
   ],
   controllers: [UsersController],
   providers: [UsersService],

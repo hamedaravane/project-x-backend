@@ -423,7 +423,7 @@ export interface LoginUserResponse {
 }
 
 export class LoginInfo {
-  @IsEmail({message: 'email is not in the right format'})
+  @IsEmail({},{message: 'email is not in the right format'})
   @IsNotEmpty({message: 'email should not be empty'})
   @IsString()
   email: string;
