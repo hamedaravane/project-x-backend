@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ApiResponse} from '../shared/api-response.model';
-import {CreateUserResponse, LoginUser} from './users.entities';
+import {CreateUserResponse, LoginInfo, LoginUser} from './users.entities';
 import {CreateUserDto} from './users.entities';
 import {UsersService} from './users.service';
 
@@ -65,8 +65,7 @@ export class UsersController {
   }
 
   @Post('login')
-  async loginUser(@Body() authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {
-    console.log(authInfo);
+  async loginUser(@Body() authInfo: LoginInfo): Promise<ApiResponse<CreateUserResponse>> {
     return await this.usersService.loginUser(authInfo);
   }
 }

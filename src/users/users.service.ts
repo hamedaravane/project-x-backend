@@ -2,7 +2,14 @@ import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {ApiResponse} from '../shared/api-response.model';
-import {CreateUserDto, CreateUserResponse, UserEntity, convertUserDtoToUserEntity, LoginUser} from './users.entities';
+import {
+  CreateUserDto,
+  CreateUserResponse,
+  UserEntity,
+  convertUserDtoToUserEntity,
+  LoginUser,
+  LoginInfo
+} from './users.entities';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -21,9 +28,9 @@ export class UsersService {
     return bcrypt.compare(password, user.password);
   }
 
-  async findProfilePhoto(email: string, isValid: boolean) {
+  /*async findProfilePhoto(email: string, isValid: boolean) {
 
-  }
+  }*/
 
   async registerUser(userDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
     const userEntity = convertUserDtoToUserEntity(userDto);
@@ -36,7 +43,7 @@ export class UsersService {
     };
   }
 
-  async loginUser(authInfo: LoginUser): Promise<ApiResponse<CreateUserResponse>> {
+  async loginUser(authInfo: LoginInfo): Promise<ApiResponse<CreateUserResponse>> {
     return {
       success: true,
       data: {email: authInfo.email, message: 'You successfully logged in'},
