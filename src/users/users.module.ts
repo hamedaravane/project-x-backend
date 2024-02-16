@@ -6,6 +6,7 @@ import {UsersController} from './users.controller';
 import {UserEntity} from './users.entities';
 import {UsersService} from './users.service';
 import {JwtModule} from '@nestjs/jwt';
+import {jwtConstants} from './constants';
 
 @Module({
   imports: [
@@ -13,7 +14,11 @@ import {JwtModule} from '@nestjs/jwt';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
-    JwtModule
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
+    }),
   ],
   controllers: [UsersController],
   providers: [UsersService],

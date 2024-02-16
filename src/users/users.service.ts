@@ -30,7 +30,7 @@ export class UsersService {
     if (!user) {
       return false;
     }
-    return bcrypt.compare(password, user.password);
+    return await bcrypt.compare(password, user.password);
   }
 
   async registerUser(userDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
@@ -45,13 +45,15 @@ export class UsersService {
   }
 
   async loginUser(authInfo: LoginInfo): Promise<ApiResponse<LoginUserResponse>> {
-    if (!(await this.validateUser(authInfo.email, authInfo.password))) {
+    const isValid = await this.validateUser(authInfo.email, authInfo.password);
+    if (!isValid) {
       throw new UnauthorizedException();
     }
     const payload = {email: authInfo.email};
+    const token = await this.jwtService.signAsync(payload);
     return {
       success: true,
-      data: {token: await this.jwtService.signAsync(payload), message: 'You successfully logged in'},
+      data: {token: token, message: 'You successfully logged in'},
       timestamp: new Date(),
     };
   }
