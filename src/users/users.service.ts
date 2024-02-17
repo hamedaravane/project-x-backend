@@ -10,7 +10,7 @@ import {
   LoginInfo,
   LoginUserResponse,
   UserEntity,
-  convertUserDtoToUserEntity,
+  convertUserDtoToUserEntity, userEntityToUserResponse
 } from './users.entities';
 
 @Injectable()
@@ -25,14 +25,6 @@ export class UsersService {
     return await this.userRepository.findOne({where: {email: email}});
   }
 
-  async validateUser(email: string, password: string): Promise<boolean> {
-    const user = await this.findUserByEmail(email);
-    if (!user) {
-      return false;
-    }
-    return await bcrypt.compare(password, user.password);
-  }
-
   async registerUser(userDto: CreateUserDto): Promise<ApiResponse<CreateUserResponse>> {
     const userEntity = convertUserDtoToUserEntity(userDto);
     const userRepository = this.userRepository.create(userEntity);
@@ -45,15 +37,25 @@ export class UsersService {
   }
 
   async loginUser(authInfo: LoginInfo): Promise<ApiResponse<LoginUserResponse>> {
-    const isValid = await this.validateUser(authInfo.email, authInfo.password);
+    const user = await this.findUserByEmail(authInfo.email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const isValid = await bcrypt.compare(authInfo.password, user.password);
     if (!isValid) {
       throw new UnauthorizedException();
     }
-    const payload = {email: authInfo.email};
+    const payload = {sub: user.uuid, email: user.email};
     const token = await this.jwtService.signAsync(payload);
+    const userResponse = userEntityToUserResponse(user);
+    const data = {
+      token,
+      message: 'you are successfully logged in',
+      user: userResponse
+    };
     return {
       success: true,
-      data: {token: token, message: 'You successfully logged in'},
+      data,
       timestamp: new Date(),
     };
   }

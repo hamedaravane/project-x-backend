@@ -53,14 +53,16 @@ export class UsersController {
   @Post('photo')
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfilePhoto(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({maxSize: 1000}), new FileTypeValidator({fileType: 'image/png'})],
-      }),
-    ) // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @UploadedFile()
     file: Express.Multer.File,
   ): Promise<{message: string}> {
-    return {message: 'Profile photo uploaded successfully'};
+    try {
+      console.log(file);
+      return {message: 'Profile photo uploaded successfully'};
+    } catch (e) {
+      console.error(e);
+      throw new HttpException('Failed to upload profile photo', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Post('login')
