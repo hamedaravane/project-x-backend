@@ -41,5 +41,6 @@ package-lock.json
 .pnp.loader.mjs
 .pnp.cjs
 
+uploads
 environment/**
 /qodana.yaml
