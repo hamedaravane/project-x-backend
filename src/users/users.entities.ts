@@ -1,21 +1,20 @@
 import * as bcrypt from 'bcrypt';
 import {Transform, Type} from 'class-transformer';
 import {
-  Allow,
-  IsAlpha,
-  IsDate,
-  IsEmail,
-  IsEnum,
-  IsMobilePhone,
-  IsNotEmpty,
-  IsString,
-  IsStrongPassword,
-  Length,
-  Matches,
-  ValidateIf,
+	Allow,
+	IsAlpha,
+	IsDate,
+	IsEmail,
+	IsEnum,
+	IsMobilePhone,
+	IsNotEmpty,
+	IsString,
+	IsStrongPassword, IsUUID,
+	Length,
+	Matches,
+	ValidateIf
 } from 'class-validator';
 import {BeforeInsert, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn} from 'typeorm';
-import {v4 as uuid} from 'uuid';
 
 enum UserType {
   BUSINESS = 'business',
@@ -70,7 +69,7 @@ export enum ProfessionEnum {
 export class UserEntity {
   @IsString()
   @PrimaryColumn({nullable: false, unique: true, type: 'uuid'})
-  uuid = uuid();
+  uuid: string;
 
   @IsString()
   @Column({unique: true, nullable: false})
@@ -256,6 +255,9 @@ export class UserEntity {
  */
 
 export class CreateUserDto {
+	@IsUUID()
+	uuid: string;
+
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -384,7 +386,7 @@ export class CreateUserDto {
 
 export function convertUserDtoToUserEntity(createUserDto: CreateUserDto): UserEntity {
   const userEntity = new UserEntity();
-
+	userEntity.uuid = createUserDto.uuid;
   userEntity.email = createUserDto.email;
   userEntity.password = createUserDto.password;
   userEntity.type = createUserDto.user_type;
@@ -420,8 +422,10 @@ export interface CreateUserResponse {
 
 export function userEntityToUserResponse(data: UserEntity): UserResponse {
   return {
+		uuid: data.uuid,
     email: data.email,
     type: data.type,
+		profile_photo_src: `uploads/photos/profile/${data.uuid}.png`,
     influencer_type: data.influencer_type,
     business_type: data.business_type,
     gender: data.gender,
@@ -453,8 +457,10 @@ export interface LoginUserResponse {
 }
 
 export interface UserResponse {
+	uuid: string;
   email: string;
   type: UserType;
+	profile_photo_src: string;
   influencer_type: ProfessionEnum;
   business_type: IndustryValue;
   gender: Gender;

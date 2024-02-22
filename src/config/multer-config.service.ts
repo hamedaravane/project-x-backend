@@ -7,10 +7,9 @@ export class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
     const options: DiskStorageOptions = {
       destination: 'uploads/photos/profile',
-      filename: (req, file, callback): void => {
-        const fileExtension = file.mimetype.slice(file.mimetype.indexOf('/') + 1);
-        callback(null, `profile_photo-${new Date().toISOString()}.${fileExtension}`);
-      }
+			filename: (req, file, callback): void => {
+				callback(null, `${file.originalname}.png`);
+			}
     };
     return {
       storage: diskStorage(options),
