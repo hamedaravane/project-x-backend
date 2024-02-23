@@ -6,7 +6,7 @@ import {DiskStorageOptions, diskStorage} from 'multer';
 export class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
     const options: DiskStorageOptions = {
-      destination: 'uploads/photos/profile',
+      destination: 'E:/nginx/www/images',
 			filename: (req, file, callback): void => {
 				callback(null, `${file.originalname}.png`);
 			}

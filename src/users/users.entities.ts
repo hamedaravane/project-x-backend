@@ -425,7 +425,7 @@ export function userEntityToUserResponse(data: UserEntity): UserResponse {
 		uuid: data.uuid,
     email: data.email,
     type: data.type,
-		profile_photo_src: `uploads/photos/profile/${data.uuid}.png`,
+		profile_photo_src: `http://localhost/images/${data.uuid}.png`,
     influencer_type: data.influencer_type,
     business_type: data.business_type,
     gender: data.gender,
